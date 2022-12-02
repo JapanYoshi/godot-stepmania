@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/Kommisar - Springtime.mp3-246f52959b86799c188ffb8303377f2b.mp3str"
+
+[deps]
+
+source_file="res://test/Springtime/Kommisar - Springtime.mp3"
+dest_files=[ "res://.import/Kommisar - Springtime.mp3-246f52959b86799c188ffb8303377f2b.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

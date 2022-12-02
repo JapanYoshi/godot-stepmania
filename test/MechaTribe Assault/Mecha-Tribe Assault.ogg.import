@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Mecha-Tribe Assault.ogg-cfc73c3aac0211c9f7b6bada4d360658.oggstr"
+
+[deps]
+
+source_file="res://test/MechaTribe Assault/Mecha-Tribe Assault.ogg"
+dest_files=[ "res://.import/Mecha-Tribe Assault.ogg-cfc73c3aac0211c9f7b6bada4d360658.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

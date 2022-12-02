@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Goin' Under.ogg-c481ed94171241051961d6a565472204.oggstr"
+
+[deps]
+
+source_file="res://test/Goin' Under/Goin' Under.ogg"
+dest_files=[ "res://.import/Goin' Under.ogg-c481ed94171241051961d6a565472204.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0
