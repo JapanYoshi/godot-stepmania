@@ -11,6 +11,7 @@ This is a Godot add-on that parses the contents of .sm or .ssc files (used by St
 
 * Make timing the chart easy, even with BPM changes, using a `StepTiming` object
 * Automatically find the .sm or .ssc file within a folder
+* Load and store song metadata ONLY; Given the metadata, load only a specific stepchart.
 
 ## Contribution
 
