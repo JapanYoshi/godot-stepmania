@@ -33,7 +33,7 @@ export var bg_changes: String = ""
 export var fg_changes: String = ""
 export var charts: Array = []
 
-var song_timing: StepTiming = StepTiming.new()
+var timing: StepTiming = StepTiming.new()
 
 func reset():
 	sm_version = ""
@@ -61,7 +61,7 @@ func reset():
 	bg_changes = ""
 	fg_changes = ""
 	charts = []
-	song_timing.reset()
+	timing.reset()
 	song_imported = false
 
 
@@ -126,69 +126,69 @@ func import_song(filename: String) -> int:
 			# song or chart timing
 			"#OFFSET":
 				if current_chart == -1:
-					song_timing.offset = float(line_split[1])
+					timing                      .offset = float(line_split[1])
 				else:
-					charts[current_chart].timing = float(line_split[1])
+					charts[current_chart].timing.offset = float(line_split[1])
 			"#BPMS":
 				if current_chart == -1:
-					song_timing          .import_bpms(line_split[1])
+					timing                      .import_bpms(line_split[1])
 				else:
-					charts[current_chart].import_bpms(line_split[1])
+					charts[current_chart].timing.import_bpms(line_split[1])
 			"#STOPS":
 				if current_chart == -1:
-					song_timing          .import_stops(line_split[1])
+					timing                      .import_stops(line_split[1])
 				else:
-					charts[current_chart].import_stops(line_split[1])
+					charts[current_chart].timing.import_stops(line_split[1])
 			"#DELAYS":
 				if current_chart == -1:
-					song_timing          .import_delays(line_split[1])
+					timing                      .import_delays(line_split[1])
 				else:
-					charts[current_chart].import_delays(line_split[1])
+					charts[current_chart].timing.import_delays(line_split[1])
 			"#SPEEDS":
 				if current_chart == -1:
-					song_timing          .import_speeds(line_split[1])
+					timing                      .import_speeds(line_split[1])
 				else:
-					charts[current_chart].import_speeds(line_split[1])
+					charts[current_chart].timing.import_speeds(line_split[1])
 			"#SCROLLS":
 				if current_chart == -1:
-					song_timing          .import_scrolls(line_split[1])
+					timing                      .import_scrolls(line_split[1])
 				else:
-					charts[current_chart].import_scrolls(line_split[1])
+					charts[current_chart].timing.import_scrolls(line_split[1])
 			"#WARPS":
 				if current_chart == -1:
-					song_timing          .import_warps(line_split[1])
+					timing                      .import_warps(line_split[1])
 				else:
-					charts[current_chart].import_warps(line_split[1])
+					charts[current_chart].timing.import_warps(line_split[1])
 			"#FAKES":
 				if current_chart == -1:
-					song_timing          .import_fakes(line_split[1])
+					timing                      .import_fakes(line_split[1])
 				else:
-					charts[current_chart].import_fakes(line_split[1])
+					charts[current_chart].timing.import_fakes(line_split[1])
 			"#TICKCOUNTS":
 				if current_chart == -1:
-					song_timing          .import_tick_counts(line_split[1])
+					timing                      .import_tick_counts(line_split[1])
 				else:
-					charts[current_chart].import_tick_counts(line_split[1])
+					charts[current_chart].timing.import_tick_counts(line_split[1])
 			"#TIMESIGNATURES":
 				if current_chart == -1:
-					song_timing          .import_time_signatures(line_split[1])
+					timing                      .import_time_signatures(line_split[1])
 				else:
-					charts[current_chart].import_time_signatures(line_split[1])
+					charts[current_chart].timing.import_time_signatures(line_split[1])
 			"#LABELS":
 				if current_chart == -1:
-					song_timing          .import_labels(line_split[1])
+					timing                      .import_labels(line_split[1])
 				else:
-					charts[current_chart].import_labels(line_split[1])
+					charts[current_chart].timing.import_labels(line_split[1])
 			"#COMBOS":
 				if current_chart == -1:
-					song_timing          .import_combos(line_split[1])
+					timing                      .import_combos(line_split[1])
 				else:
-					charts[current_chart].import_combos(line_split[1])
+					charts[current_chart].timing.import_combos(line_split[1])
 			"#DISPLAYBPM":
 				if current_chart == -1:
-					song_timing          .import_display_bpm(line_split[1])
+					timing                      .import_display_bpm(line_split[1])
 				else:
-					charts[current_chart].import_display_bpm(line_split[1])
+					charts[current_chart].timing.import_display_bpm(line_split[1])
 			# new note data
 			"#NOTEDATA":
 				current_chart += 1

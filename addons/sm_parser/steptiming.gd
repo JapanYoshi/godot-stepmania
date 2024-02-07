@@ -29,19 +29,19 @@ export var display_bpm_high: float = BPM_DEFAULT
 
 func reset():
 	offset = 0.0
-	bpms.clear()
+	bpms.resize(0)
 	bpms_min = INF
 	bpms_max = -INF
-	stops.clear()
-	speeds.clear()
-	delays.clear()
-	scrolls.clear()
-	fakes.clear()
-	warps.clear()
-	tick_counts.clear()
-	time_signatures.clear()
-	labels.clear()
-	combos.clear()
+	stops.resize(0)
+	speeds.resize(0)
+	delays.resize(0)
+	scrolls.resize(0)
+	fakes.resize(0)
+	warps.resize(0)
+	tick_counts.resize(0)
+	time_signatures.resize(0)
+	labels.resize(0)
+	combos.resize(0)
 	display_bpm_low = BPM_DEFAULT
 	display_bpm_high = BPM_DEFAULT
 	chart_imported = false
@@ -52,20 +52,20 @@ func reset():
 
 ### Import and store data from text extracted from the SM/SSC file.
 func _split_timestamps(text: String, max_split: int = 1) -> Array:
-	var arr = text.split(",")
-	for line in arr:
-		var split = line.split("=", true, max_split)
-		line = []
+	var arr: Array = Array(text.split(",", false))
+	for i in range(len(arr)):
+		var split = arr[i].split("=", true, max_split)
+		arr[i] = []
 		for e in split:
-			line.push_back(float(e))
+			arr[i].push_back(float(e))
 	return arr
 
 
 func _split_timestamps_text(text: String) -> Array:
-	var arr = text.split(",")
-	for line in arr:
-		var split = line.split("=", true, 1)
-		line = [float(split[0]), split[1]]
+	var arr: Array = Array(text.split(",", false))
+	for i in range(len(arr)):
+		var split = arr[i].split("=", true, 1)
+		arr[i] = [float(split[0]), split[1]]
 	return arr
 
 
@@ -134,8 +134,83 @@ func get_display_bpms() -> Array:
 		return [bpms_min, bpms_max]
 	return [display_bpm_low, display_bpm_high]
 
+# bpms: Array
+# stops: Array
+# delays: Array
+# warps: Array
+var bpm_values: PoolRealArray
+var bpm_offsets: PoolRealArray
+
+func _combined_timing_change_sorter(a, b):
+	if a.time != b.time:
+		return a.time < b.time
+	var ranking = ["warp", "delay", "stop", "bpm"]
+	return ranking.find(a.type) < ranking.find(b.type)
+
 ### Prebakes the timing changes, in order to convert between time and beats.
 func render():
+	if bpms.empty():
+		printerr("Tried to prebake timing changes without a valid BPM entry.")
+		return
+	bpm_offsets = PoolRealArray([offset])
+	var combined_timing_change_events: Array = []
+	for bpm_change in bpms:
+		combined_timing_change_events.push_back({
+			type = "bpm",
+			time = int(round(bpm_change[0] * 192.0)),
+			value = bpm_change[1]
+		})
+	for stop in stops:
+		combined_timing_change_events.push_back({
+			type = "stop",
+			time = int(round(stop[0] * 192.0)),
+			value = stop[1]
+		})
+	for delay in delays:
+		combined_timing_change_events.push_back({
+			type = "delay",
+			time = int(round(delay[0] * 192.0)),
+			value = delay[1]
+		})
+	for warp in warps:
+		combined_timing_change_events.push_back({
+			type = "warp",
+			time = int(round(warp[0] * 192.0)),
+			value = warp[1]
+		})
+	combined_timing_change_events.sort_custom(self, "_combined_timing_change_sorter")
+	#print(combined_timing_change_events)
+	var bpm_now: float = 0
+	var time_now: float = offset
+	while not combined_timing_change_events.empty():
+		var this_event = combined_timing_change_events.pop_front()
+		var next_event = combined_timing_change_events.front() # doesn't pop, just for reference
+		if this_event.type == "bpm":
+			bpm_values.push_back(this_event.value)
+			bpm_now = this_event.value
+		elif this_event.type == "stop":
+			bpm_values.push_back(0.0)
+			time_now += this_event.value
+			bpm_offsets.push_back(time_now)
+			bpm_values.push_back(bpm_now)
+		elif this_event.type == "delay":
+			bpm_values.push_back(0.0)
+			time_now += this_event.value
+			bpm_offsets.push_back(time_now)
+		elif this_event.type == "warp":
+			bpm_values.push_back(-INF)
+			time_now += this_event.value
+			bpm_offsets.push_back(this_event.value)
+			bpm_values.push_back(bpm_now)
+		if null != next_event:
+			var ticks_till_next: float = (next_event.time - this_event.time)
+			var time_till_next = ticks_till_next * 0.3125 / bpm_now # 192 ticks per beat, 60 seconds per minute
+			bpm_offsets.push_back(
+				bpm_offsets[len(bpm_offsets) - 1] + time_till_next
+			)
+			time_now += time_till_next
+	print(bpm_values)
+	print(bpm_offsets)
 	return;
 
 

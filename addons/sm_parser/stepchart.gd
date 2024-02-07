@@ -10,7 +10,7 @@ const NOTES = {
 	NOTE = "1",
 	HOLD_HEAD = "2",
 	HOLD_TAIL = "3",
-	MILE = "M",
+	MINE = "M",
 	LIFT = "L",
 }
 
@@ -20,7 +20,8 @@ const NOTES = {
 ###   2: Time (ticks),
 ### ]
 var notes: Array = []
-var timing: StepTiming = StepTiming.new()
+var timing: StepTiming
+var timed_notes: Array = []
 
 # Textual content from SM/SSC.
 var steps_type: String = ""
@@ -36,6 +37,10 @@ var difficulty: int = -1
 
 # Inferred from parsing.
 var lane_count: int = 0
+
+func _init():
+	timing = StepTiming.new()
+	print("New chart has been initialized", timing.get_instance_id())
 
 
 ### Difficulty text is just an enum.
